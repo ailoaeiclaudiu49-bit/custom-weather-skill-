@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px; 
+      margin: 0;
+    }
+    .widget {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      width: 100%;
+      max-width: 300px;
+    }
+    h1 { margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;}
+    .temp { font-size: 64px; font-weight: bold; margin: 15px 0; }
+    .cond { font-size: 22px; font-style: italic; color: #ffeb3b; }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <h1 id="loc">Loading...</h1>
+    <div class="temp" id="tmp">--</div>
+    <div class="cond" id="cnd">--</div>
+  </div>
+  
+  <script>
+    // Read the data sent over by our bridge script
+    const params = new URLSearchParams(window.location.search);
+    let locationName = "Unknown";
+    let temp = "--";
+    let condition = "--";
+
+    try {
+      if (params.has('data')) {
+        const parsed = JSON.parse(decodeURIComponent(params.get('data')));
+        locationName = parsed.location || locationName;
+        temp = parsed.temperature || temp;
+        condition = parsed.condition || condition;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    // Draw the data on the screen
+    document.getElementById('loc').innerText = locationName;
+    document.getElementById('tmp').innerText = temp;
+    document.getElementById('cnd').innerText = condition;
+  </script>
+</body>
+</html>
