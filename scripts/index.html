@@ -38,9 +38,16 @@
   </div>
   
   <script>
-    // 1. THIS IS THE FIX: Tell the Android app that the widget loaded successfully
+    // 1. The "Kitchen Sink" return: trying to force the app to show the UI
     function ai_edge_gallery_get_result() {
-      return JSON.stringify({ status: "success" });
+      return JSON.stringify({ 
+        status: "success",
+        result: "Widget loaded.",
+        show_ui: true,
+        ui: true,
+        height: 250,
+        type: "widget"
+      });
     }
 
     // 2. Read the data sent by the AI
