@@ -10,7 +10,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 40px; 
+      min-height: 150px; 
       margin: 0;
     }
     .widget {
@@ -21,6 +22,8 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
       border: 1px solid rgba(255, 255, 255, 0.18);
+      width: 100%;
+      max-width: 300px;
     }
     h1 { margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;}
     .temp { font-size: 64px; font-weight: bold; margin: 15px 0; }
@@ -33,8 +36,14 @@
     <div class="temp" id="tmp">--</div>
     <div class="cond" id="cnd">--</div>
   </div>
+  
   <script>
-    // The Edge Gallery app injects the AI's data into the URL parameters
+    // 1. THIS IS THE FIX: Tell the Android app that the widget loaded successfully
+    function ai_edge_gallery_get_result() {
+      return JSON.stringify({ status: "success" });
+    }
+
+    // 2. Read the data sent by the AI
     const params = new URLSearchParams(window.location.search);
     let locationName = "Unknown";
     let temp = "--";
@@ -48,10 +57,10 @@
         condition = parsed.condition || condition;
       }
     } catch (e) {
-      console.error(e);
+      console.error("Data parse error:", e);
     }
 
-    // Update the HTML with the AI's data
+    // 3. Draw the data on the screen
     document.getElementById('loc').innerText = locationName;
     document.getElementById('tmp').innerText = temp;
     document.getElementById('cnd').innerText = condition;
