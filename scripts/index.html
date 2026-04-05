@@ -1,76 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      color: white;
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 40px; 
-      min-height: 150px; 
-      margin: 0;
-    }
-    .widget {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      width: 100%;
-      max-width: 300px;
-    }
-    h1 { margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;}
-    .temp { font-size: 64px; font-weight: bold; margin: 15px 0; }
-    .cond { font-size: 22px; font-style: italic; color: #ffeb3b; }
-  </style>
-</head>
-<body>
-  <div class="widget">
-    <h1 id="loc">Loading...</h1>
-    <div class="temp" id="tmp">--</div>
-    <div class="cond" id="cnd">--</div>
-  </div>
-  
-  <script>
-    // 1. The "Kitchen Sink" return: trying to force the app to show the UI
-    function ai_edge_gallery_get_result() {
-      return JSON.stringify({ 
-        status: "success",
-        result: "Widget loaded.",
-        show_ui: true,
-        ui: true,
-        height: 250,
-        type: "widget"
-      });
-    }
-
-    // 2. Read the data sent by the AI
-    const params = new URLSearchParams(window.location.search);
-    let locationName = "Unknown";
-    let temp = "--";
-    let condition = "--";
-
-    try {
-      if (params.has('data')) {
-        const parsed = JSON.parse(params.get('data'));
-        locationName = parsed.location || locationName;
-        temp = parsed.temperature || temp;
-        condition = parsed.condition || condition;
-      }
-    } catch (e) {
-      console.error("Data parse error:", e);
-    }
-
-    // 3. Draw the data on the screen
-    document.getElementById('loc').innerText = locationName;
-    document.getElementById('tmp').innerText = temp;
-    document.getElementById('cnd').innerText = condition;
-  </script>
-</body>
+  <body>
+    <script>
+      window['ai_edge_gallery_get_result'] = async (data) => {
+        // Encode the AI's data to pass it safely in a URL
+        const encodedData = encodeURIComponent(data || "{}");
+        
+        // The magic payload that tells the app to open our visual widget!
+        return JSON.stringify({
+          result: "Weather successfully loaded.",
+          webview: {
+            url: `../assets/widget.html?data=${encodedData}`
+          }
+        });
+      };
+    </script>
+  </body>
 </html>
